@@ -1,0 +1,31 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+data=pd.read_csv('http://bit.ly/w-data')
+print('shape of the dataset is: ',data.shape)
+data.head()
+data.describe()
+data.info()
+data.plot(kind='scatter',x='Hours',y='Scores')
+plt.show
+data.corr(method='spearman')
+x=data.iloc[:,:-1].values
+y=data.iloc[:,1].values
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.2,random_state=50)
+from sklearn.linear_model import LinearRegression
+reg = LinearRegression()
+reg.fit(x_train,y_train)
+m=reg.coef_
+c=reg.intercept_
+line=m*x+c
+plt.scatter(x,y)
+plt.plot(x,line)
+plt.show()
+y_pred = reg.predict(x_test)
+actual_predicted = pd.DataFrame({'Target':y_test,'Predicted':y_pred})
+actual_predicted
+h=9.25
+s=reg.predict([[h]])
+print("If a student studies for {} hours per day he/she will score {}% in exams.".format(h,s))
